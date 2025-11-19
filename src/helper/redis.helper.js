@@ -12,7 +12,7 @@ class RedisHelper {
         }
 
         try {
-            const url = `redis://${process.env.REDIS_HOST }:${process.env.REDIS_PORT}`;
+            const url = `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
 
             this.client = redis.createClient({
                 url,
@@ -33,7 +33,7 @@ class RedisHelper {
             throw error;
         }
     }
-    
+
     async disconnect() {
         if (this.client) {
             await this.client.quit();
@@ -50,14 +50,23 @@ class RedisHelper {
     async set(key, value, ttl = null) {
         try {
             await this.#ensureClient();
-            const expiry = ttl !== null ? ttl : parseInt(process.env.REDIS_EXPIRY_TIME, 10);
-            const options = Number.isFinite(expiry) && expiry > 0 ? { EX: expiry } : undefined;
-            console.log(`[RedisHelper] Setting key: ${key}, TTL: ${expiry}, Options:`, options);
-            await this.client.set(key, JSON.stringify(value), options);
-            console.log(`[RedisHelper] Key set successfully: ${key}`);
-        } catch (error) {
-            console.error('Error setting key:', error);
-            throw error;
+
+            const fallbackTTL = parseInt(process.env.REDIS_EXPIRY_TIME, 10);
+            const expiry = Number.isFinite(ttl) ? ttl :
+                Number.isFinite(fallbackTTL) ? fallbackTTL : null;
+
+            let result;
+            if (expiry && expiry > 0) {
+                result = await this.client.set(key, JSON.stringify(value), { EX: expiry });
+            } else {
+                result = await this.client.set(key, JSON.stringify(value));
+            }
+
+            console.log(`[RedisHelper] Set key ${key} with TTL ${expiry}`);
+            return result;
+        } catch (err) {
+            console.error("Redis SET error:", err);
+            throw err;
         }
     }
 

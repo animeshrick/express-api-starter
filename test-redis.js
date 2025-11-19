@@ -10,6 +10,7 @@ async function testRedis() {
 
     // Test set
     await redisHelper.set('test_key', { message: 'Hello Redis!' });
+    await redisHelper.set("user_123", { name: "Animesh test timeout 15sec" }, 15);
     console.log('✅ Set test_key');
 
     // Test get
@@ -20,7 +21,7 @@ async function testRedis() {
     const exists = await redisHelper.exists('test_key');
     console.log('✅ Key exists:', exists);
 
-    // Cleanup
+    Cleanup
     await redisHelper.delete('test_key');
     console.log('✅ Deleted test_key');
 

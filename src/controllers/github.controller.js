@@ -74,7 +74,8 @@ exports.getUserEvents = async (req, res, next) => {
     // convert map values to final array
     const finalMessages = Array.from(finalMap.values());
     const name = `github:useraction:${user_name}`
-    await redisHelper.set(name, finalMessages, 5);
+    await redisHelper.set(name, finalMessages, 86400); // 1 day expiry
+
 
     res.status(200).json({ success: true, message: finalMessages });
 

@@ -28,3 +28,9 @@ For more information, see the project files in the `src/` directory.
 ### Install project dependencies
 If you need to reinstall all required packages:
 npm install
+
+
+- Test redis connection using test-redis.js
+```
+node test-redis.js
+```
