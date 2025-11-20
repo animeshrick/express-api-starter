@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const productRoutes = require("./routes/product.routes");
 const githubRoutes = require("./routes/github.routes");
+const uploadRoutes = require("./routes/upload.routes");
 const errorHandler = require("./middlewares/error.middleware");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json()); // Parse JSON body
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/github", githubRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Health Check Route
 app.get("/", (req, res) => {
