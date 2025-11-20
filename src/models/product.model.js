@@ -32,6 +32,12 @@ async function getAllProducts() {
 // Find product by ID
 async function getProductById(id) {
   const collection = getProductsCollection();
+  
+  // Validate ObjectId format
+  if (!ObjectId.isValid(id)) {
+    return null;
+  }
+  
   return await collection.findOne({ _id: new ObjectId(id) });
 }
 
