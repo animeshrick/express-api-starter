@@ -7,6 +7,7 @@ const uploadController = require("../controllers/upload.controller");
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Single-file upload route
-router.post("/", upload.single("avatar"), uploadController.uploadToCloudinary);
+router.post("/single", upload.single("avatar"), uploadController.uploadToCloudinary);
+router.post("/multiple", upload.array("avatars", 2), uploadController.uploadMultipleToCloudinary);
 
 module.exports = router;
