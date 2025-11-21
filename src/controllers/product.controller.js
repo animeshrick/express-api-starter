@@ -4,7 +4,8 @@ const {
   getAllProducts,
   getProductById,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getProductsByIds
 } = require("../models/product.model");
 
 // Create product
@@ -80,10 +81,7 @@ exports.deleteProduct = async (req, res, next) => {
 // Get recently viewed products
 exports.recentlyViewedProducts = async (req, res, next) => {
   try {
-    console.log("req: ", req.body.user_id);
     const key = `recent:${req.body.user_id || "guest"}`;
-
-    console.log("key: ", key);
 
     // fetch updated list
     const p_ids = await redisHelper.lRange(key, 0, 9);
@@ -93,11 +91,12 @@ exports.recentlyViewedProducts = async (req, res, next) => {
     if (!p_ids || p_ids.length === 0) {
       return res.json({ success: true, viewed: [] });
     }
-    let products = []
-    for(let i=0;i<= p_ids.length;i++){
-      const product = await getProductById(p_ids[i]);
-      products.push(product);
-    }
+    const productIds = await getProductsByIds(p_ids);
+    
+    // Maintain the order of recently viewed items
+    const products = p_ids
+      .map(id => productIds.find(p => p._id.toString() === id))
+      .filter(p => p); // Remove any nulls (if product was deleted)
 
     res.json({ success: true, viewed: products });
   } catch (err) {

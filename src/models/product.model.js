@@ -62,10 +62,23 @@ async function deleteProduct(id) {
   return await collection.deleteOne({ _id: new ObjectId(id) });
 }
 
+// Find products by multiple IDs
+async function getProductsByIds(ids) {
+  const collection = getProductsCollection();
+  const objectIds = ids
+    .filter(id => ObjectId.isValid(id))
+    .map(id => new ObjectId(id));
+    
+  if (objectIds.length === 0) return [];
+  
+  return await collection.find({ _id: { $in: objectIds } }).toArray();
+}
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getProductsByIds
 };
