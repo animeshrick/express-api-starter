@@ -1,5 +1,6 @@
 ## Description
 Brief description of the changes.
+Example: "This PR contains ..."
 
 ## Type of Change
 - [ ] Bug fix
