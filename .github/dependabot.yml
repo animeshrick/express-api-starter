@@ -1,0 +1,24 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    
+    # Don't auto-merge major versions
+    ignore:
+      - dependency-name: "*"
+        update-types: 
+          - "version-update:semver-major"
+    
+    # Only direct dependencies
+    allow:
+      - dependency-type: "direct"
+    
+    # Limit open PRs
+    open-pull-requests-limit: 3
+    
+    # Commit message customization
+    commit-message:
+      prefix: "chore:"
+      include: "scope"
