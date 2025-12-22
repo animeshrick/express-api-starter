@@ -34,3 +34,21 @@ npm install
 ```
 node test-redis.js
 ```
+
+---------------------------------------------------- DOCKER (NODE JS)-----------------------------------------------
+To create a docker image from a custom route:
+>> docker build -t express-api -f Docker/node/Dockerfile .
+
+Run the image:
+>> docker run -p 3000:8000 node-api-container express-api
+--> docker run -p 3000:8000 --name node-api-container express-api:latest
+
+. Docker read this as:
+
+HOST_PORT : CONTAINER_PORT
+Image: node-api-container
+Command: express-api
+
+To view list of docker images:
+>> docker ps -a
+
