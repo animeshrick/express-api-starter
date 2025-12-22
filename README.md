@@ -52,3 +52,9 @@ Command: express-api
 To view list of docker images:
 >> docker ps -a
 
+Reuse the existing container (best if it already exists)
+>> docker start node-api-container
+
+
+
+
